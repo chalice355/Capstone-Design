@@ -85,7 +85,7 @@ sequenceDiagram
 ---
 
 ## 순서도
-```
+```mermaid
 flowchart TD
     A([앱 실행]) --> B{화면 선택}
 
