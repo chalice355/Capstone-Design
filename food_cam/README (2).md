@@ -85,6 +85,7 @@ sequenceDiagram
 ---
 
 ## 순서도
+
 ```mermaid
 flowchart TD
     A([앱 실행]) --> B{화면 선택}
@@ -121,6 +122,7 @@ flowchart TD
     H --> I([완료])
 
 ```
+---
 
 ## 앱 화면 구성
 
