@@ -21,32 +21,39 @@
 ## 시스템 구조
 
 ```mermaid
-graph TB
-    subgraph APP["Flutter 안드로이드 앱"]
-        CAM[카메라 촬영]
-        RAND[랜덤 탐색]
-        DIARY[음식 일기]
-    end
+flowchart TD
+    A([앱 실행]) --> B[홈 화면\n촬영 버튼 + 랜덤 탐색 버튼]
 
-    subgraph SERVER["백엔드 (FastAPI)"]
-        MODEL[EfficientNet-B0\n음식 인식 모델]
-        LLM[LLM API\nGPT / Gemini]
-        SEARCH[웹 검색\nWikipedia API]
-    end
+    B -->|촬영 버튼| C[카메라 화면]
+    B -->|랜덤 탐색 버튼| R[랜덤 음식 선택]
 
-    subgraph DB["데이터베이스"]
-        FIREBASE[(Firebase\nFirestore + Storage\n식단 일기 기록)]
-    end
+    C --> C1[음식 사진 촬영\n또는 갤러리 선택]
+    C1 --> C2[FastAPI 서버로 전송]
+    C2 --> C3[EfficientNet-B0 추론]
+    C3 --> C4{인식 성공?}
+    C4 -->|No| C1
+    C4 -->|Yes| E
 
-    AIHUB[AI Hub\n한국 음식 이미지] -->|파인튜닝| MODEL
+    R --> E[결과 화면\n음식명 + 신뢰도]
 
-    CAM -->|사진 전송| MODEL
-    RAND -->|음식명 전달| LLM
-    MODEL -->|음식명| LLM
-    LLM -->|정보 요청| SEARCH
-    SEARCH -->|검색 결과| LLM
-    LLM -->|유래·술·이야기·미디어| APP
-    APP <-->|일기 저장·조회| FIREBASE
+    E --> F[탭 선택]
+    F --> F1[유래]
+    F --> F2[술]
+    F --> F3[이야기]
+    F --> F4[노래]
+    F --> F5[미디어]
+
+    F1 & F2 & F3 & F4 & F5 --> G{일기에 저장?}
+    G -->|No| F
+    G -->|Yes| H[메모 입력 후\nFirebase 저장]
+    H --> I[일기 목록에 추가됨]
+
+    I --> J{일기 보기?}
+    J -->|Yes| K[일기 목록 화면\n날짜·카테고리별 열람]
+    J -->|No| B
+
+    K --> L[기록 클릭]
+    L --> E
 ```
 
 ---
