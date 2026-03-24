@@ -20,54 +20,45 @@
 
 ```mermaid
 graph TB
-    subgraph PREPARE["사전 준비 (개발 단계)"]
-        AIHUB[AI Hub\n한국 음식 이미지\n150종+]
-        FOODLIST[한식 목록\n로컬 JSON\n100종]
+    subgraph READY["사전 준비"]
+        AIHUB[AI Hub 음식 이미지]
+        FOODLIST[한식 목록 JSON]
     end
 
     subgraph APP["Flutter 안드로이드 앱"]
-        subgraph ENTRY["진입 경로"]
-            CAM[카메라 촬영\n갤러리 선택]
-            RAND[랜덤 탐색\n오늘의 음식]
-            DIARY[음식 일기\n저장 기록 열람]
-        end
-        subgraph RESULT["결과 화면 (탭)"]
-            T1[유래 탭]
-            T2[술 탭]
-            T3[이야기 탭]
-            T4[노래 탭]
-            T5[미디어 탭]
-        end
-        SAVE[일기 저장\n메모 입력]
+        CAM[카메라 촬영]
+        RAND[랜덤 탐색]
+        DIARY[음식 일기]
+        TABS[결과 화면\n유래 · 술 · 이야기 · 노래 · 미디어]
+        SAVE[일기 저장]
     end
 
-    subgraph SERVER["백엔드 (FastAPI · Railway 배포)"]
+    subgraph SERVER["FastAPI 백엔드 (Railway)"]
         MODEL[EfficientNet-B0\n음식 인식]
-        WIKI[Wikipedia API\n유래·역사 검색]
-        CLAUDE[Claude API\nclaude-sonnet-4-6\n탭별 콘텐츠 생성]
+        WIKI[Wikipedia API\n유래 검색]
+        CLAUDE[Claude API\n콘텐츠 생성]
     end
 
-    subgraph FIREBASE["Firebase (클라우드)"]
-        STORE[(Firestore\n음식명·날짜·메모\n저장 탭 목록)]
-        STORAGE[(Storage\n음식 사진\n이미지 파일)]
+    subgraph FIREBASE["Firebase"]
+        STORE[(Firestore\n일기 텍스트)]
+        STORAGE[(Storage\n음식 사진)]
     end
 
     AIHUB -->|파인튜닝| MODEL
     FOODLIST -->|랜덤 pick| RAND
 
-    CAM -->|사진 POST| MODEL
-    MODEL -->|음식명 + 신뢰도| T1 & T2 & T3 & T4 & T5
-    RAND -->|음식명| T1 & T2 & T3 & T4 & T5
-    DIARY -->|저장된 음식명| T1 & T2 & T3 & T4 & T5
+    CAM -->|사진 전송| MODEL
+    MODEL -->|음식명| TABS
+    RAND -->|음식명| TABS
+    DIARY -->|저장된 음식명| TABS
 
-    T1 -->|음식명| WIKI
-    WIKI -->|유래 텍스트| CLAUDE
-    T2 & T3 & T4 & T5 -->|음식명 + 탭 종류| CLAUDE
-    CLAUDE -->|생성된 콘텐츠| RESULT
+    TABS -->|음식명| WIKI
+    WIKI -->|검색 결과| CLAUDE
+    CLAUDE -->|탭별 콘텐츠| TABS
 
-    SAVE -->|텍스트 저장| STORE
-    SAVE -->|이미지 저장| STORAGE
-    STORE & STORAGE -->|기록 불러오기| DIARY
+    SAVE -->|저장| STORE
+    SAVE -->|저장| STORAGE
+    STORE & STORAGE -->|불러오기| DIARY
 ```
 
 ---
