@@ -22,7 +22,7 @@
 graph TB
     subgraph READY["사전 준비"]
         AIHUB[AI Hub 음식 이미지]
-        FOODLIST[한식 목록 JSON]
+        FOODLIST[음식 목록 JSON]
     end
 
     subgraph APP["Flutter 안드로이드 앱"]
