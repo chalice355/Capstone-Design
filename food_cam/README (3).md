@@ -18,7 +18,7 @@
 
 ## 시스템 구조
 
-'''mermaid
+```mermaid
 graph TB
     subgraph PREPARE["사전 준비 (개발 단계)"]
         AIHUB[AI Hub\n한국 음식 이미지\n150종+]
