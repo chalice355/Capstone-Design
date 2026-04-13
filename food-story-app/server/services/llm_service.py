@@ -5,10 +5,10 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 _env_path = Path(__file__).resolve().parents[2] / ".env"
-load_dotenv(dotenv_path=_env_path)
+load_dotenv()
 
-NAVER_CLIENT_ID     = os.getenv("NAVER_CLIENT_ID")
-NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET")
+NAVER_CLIENT_ID     = os.getenv("NAVER_CLIENT_ID", "")
+NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET", "")
 SEARCH_URL          = "https://openapi.naver.com/v1/search/webkr.json"
 
 SEARCH_QUERIES = {
