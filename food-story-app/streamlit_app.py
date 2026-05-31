@@ -17,7 +17,7 @@ import streamlit as st
 from PIL import Image
 from story.services.llm_service import get_all_tabs
 from story.services.wiki_service import search_origin
-from model.predict import predict
+from story.services.vision_service import identify_food
 from story.models import Diary
 
 # ─── 페이지 설정 ──────────────────────────────────────────────────────────────
@@ -99,12 +99,11 @@ def render_home():
                 st.image(image, width=260)
             with col_info:
                 with st.spinner("음식 인식 중..."):
-                    result = predict(image)
-                food_name = result["food_name"]
-                if result.get("is_dummy"):
-                    st.info(f"인식된 음식: **{food_name}**")
-                else:
-                    st.success(f"인식된 음식: **{food_name}** (신뢰도: {result['confidence']:.1%})")
+                    import io
+                    buf = io.BytesIO()
+                    image.save(buf, format="JPEG")
+                    food_name = identify_food(buf.getvalue(), "image/jpeg")
+                st.success(f"인식된 음식: **{food_name}**")
                 if st.button("이 음식으로 검색 →", type="primary", use_container_width=True):
                     with st.spinner(f"'{food_name}' 정보 불러오는 중..."):
                         tabs_data = _load_story(food_name)
