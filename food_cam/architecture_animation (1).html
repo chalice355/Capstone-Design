@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Food Story 앱 — 시스템 블록도</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0d1117;
+  color: #e6edf3;
+  font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  width: 1080px;
+  background: #161b22;
+  border-radius: 16px;
+  padding: 26px 28px 20px;
+  border: 1px solid #30363d;
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #f0f6fc;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+
+.badges {
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.badge {
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+/* ── 섹션 ── */
+.section {
+  border-radius: 10px;
+  padding: 11px 13px 13px;
+  margin-bottom: 6px;
+}
+.sec-header {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.sec-badge {
+  padding: 2px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* ── 플로우 ── */
+.flow {
+  display: flex;
+  align-items: center;
+}
+
+.box {
+  flex: 1;
+  min-height: 76px;
+  border-radius: 8px;
+  padding: 8px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: filter 0.45s ease, border-color 0.45s ease, opacity 0.45s ease;
+  opacity: 0.35;
+  text-align: center;
+  cursor: pointer;
+}
+.box:hover { opacity: 0.5; }
+.box.active {
+  opacity: 1;
+  filter: brightness(1.45) drop-shadow(0 0 11px var(--glow, #fff));
+  border-color: rgba(255,255,255,0.32);
+}
+.box.done { opacity: 0.58; }
+
+.box-icon { font-size: 17px; line-height: 1; }
+.box-title { font-size: 12px; font-weight: 700; color: #f0f6fc; }
+.box-sub { font-size: 9px; color: #8b949e; line-height: 1.35; }
+
+.arr {
+  width: 30px;
+  flex-shrink: 0;
+  text-align: center;
+  color: #21262d;
+  font-size: 17px;
+  transition: color 0.4s ease;
+  user-select: none;
+}
+.arr.active { color: #8b949e; }
+
+/* ── 섹션 간 연결선 ── */
+.gap-row {
+  height: 14px;
+  position: relative;
+}
+.v-conn {
+  position: absolute;
+  width: 2px;
+  height: 14px;
+  border-left: 2px dashed #21262d;
+  transition: border-color 0.4s ease;
+  top: 0;
+}
+.v-conn.active { border-color: #444c56; }
+
+/* ── 현재 시나리오 표시 ── */
+.scenario-title {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  min-height: 22px;
+  margin: 10px 0 2px;
+  transition: color 0.35s ease;
+  color: #444c56;
+}
+
+/* ── 단계 텍스트 ── */
+.step-text {
+  text-align: center;
+  font-size: 21px;
+  font-weight: 700;
+  min-height: 58px;
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.4;
+  transition: opacity 0.2s ease, color 0.35s ease;
+}
+.step-text.fading { opacity: 0; }
+
+/* ── 진행 점 ── */
+.dots-row {
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  margin: 10px 0 6px;
+}
+.dot {
+  height: 7px; width: 7px;
+  border-radius: 4px;
+  background: #21262d;
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+.dot:hover { background: #444c56; }
+.dot.active { background: #f0f6fc; width: 26px; }
+.dot.done { background: #444c56; }
+
+/* ── 컨트롤 ── */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.ctrl {
+  padding: 7px 18px;
+  border-radius: 7px;
+  border: 1px solid #30363d;
+  background: #21262d;
+  color: #c9d1d9;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+.ctrl:hover { background: #30363d; }
+.ctrl.play {
+  background: #1f6feb;
+  border-color: #1f6feb;
+  color: white;
+  min-width: 108px;
+}
+.ctrl.play:hover { background: #388bfd; }
+.ctrl.play.paused { background: #21262d; border-color: #30363d; color: #c9d1d9; }
+
+.sep { width: 1px; height: 22px; background: #21262d; }
+
+.scen {
+  padding: 5px 15px;
+  border-radius: 20px;
+  border: 2px solid;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.42;
+  font-family: inherit;
+}
+.scen.sel { opacity: 1; }
+.scen:hover { opacity: 0.75; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="title">🍽️ Food Story 앱 &mdash; 시스템 블록도</div>
+
+  <div class="badges">
+    <span class="badge" style="background:#0c2a1e;border-color:#238636;color:#3fb950">Django 4.2</span>
+    <span class="badge" style="background:#0c1e3a;border-color:#1f6feb;color:#58a6ff">Flutter 3.41.9</span>
+    <span class="badge" style="background:#1a0c2e;border-color:#8957e5;color:#bc8cff">Gemini 2.5 Flash</span>
+    <span class="badge" style="background:#2d1a00;border-color:#d29922;color:#e3b341">Naver Search API</span>
+    <span class="badge" style="background:#0c2430;border-color:#1b7a8a;color:#39d3f2">Wikipedia API</span>
+    <span class="badge" style="background:#0c2a1e;border-color:#196127;color:#56d364">SQLite</span>
+  </div>
+
+  <!-- 섹션 1 -->
+  <div class="section" style="background:#0d1f12;border:1px solid #1f4a2a;">
+    <div class="sec-header" style="color:#3fb950">
+      <span class="sec-badge" style="background:#1f4a2a;color:#3fb950">①</span>
+      입력 + 검색 수집 단계
+    </div>
+    <div class="flow">
+      <div class="box" id="b-flutter" style="background:#0c1e3a;--glow:#58a6ff">
+        <span class="box-icon">📱</span>
+        <div class="box-title">Flutter App</div>
+        <div class="box-sub">텍스트/이미지 검색<br>일기 저장 · SNS 카드</div>
+      </div>
+      <div class="arr" id="a1">→</div>
+      <div class="box" id="b-django" style="background:#0c2a1e;--glow:#3fb950">
+        <span class="box-icon">⚙️</span>
+        <div class="box-title">Django REST API</div>
+        <div class="box-sub">/story/ &nbsp;/predict/<br>/diary/ &nbsp;:8000</div>
+      </div>
+      <div class="arr" id="a2">→</div>
+      <div class="box" id="b-naver" style="background:#2d1a00;--glow:#e3b341">
+        <span class="box-icon">🔍</span>
+        <div class="box-title">Naver 검색 API</div>
+        <div class="box-sub">웹 문서 검색<br>유래·술·이야기·노래</div>
+      </div>
+      <div class="arr" id="a3">→</div>
+      <div class="box" id="b-wiki" style="background:#0c2430;--glow:#39d3f2">
+        <span class="box-icon">📖</span>
+        <div class="box-title">Wikipedia API</div>
+        <div class="box-sub">음식 유래<br>원문 텍스트 수집</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gap-row">
+    <div class="v-conn" id="v-conn"></div>
+  </div>
+
+  <!-- 섹션 2 -->
+  <div class="section" style="background:#13001f;border:1px solid #3b1a5a;">
+    <div class="sec-header" style="color:#bc8cff">
+      <span class="sec-badge" style="background:#3b1a5a;color:#bc8cff">②</span>
+      AI 처리 + 응답 반환 단계
+    </div>
+    <div class="flow">
+      <div class="box" id="b-gemini" style="background:#1a0c2e;--glow:#bc8cff">
+        <span class="box-icon">✨</span>
+        <div class="box-title">Gemini 2.5 Flash</div>
+        <div class="box-sub">이미지 음식 인식<br>탭별 텍스트 요약</div>
+      </div>
+      <div class="arr" id="a4">→</div>
+      <div class="box" id="b-recommend" style="background:#2d0a1a;--glow:#f472b6">
+        <span class="box-icon">🌟</span>
+        <div class="box-title">추천 서비스</div>
+        <div class="box-sub">연관 음식 3개<br>Naver 이미지 검색</div>
+      </div>
+      <div class="arr" id="a5">→</div>
+      <div class="box" id="b-sqlite" style="background:#0c2a1e;--glow:#34d399">
+        <span class="box-icon">🗄️</span>
+        <div class="box-title">SQLite DB</div>
+        <div class="box-sub">일기 데이터<br>저장 · 조회</div>
+      </div>
+      <div class="arr" id="a6">→</div>
+      <div class="box" id="b-out" style="background:#0c1e3a;--glow:#60a5fa">
+        <span class="box-icon">🖥️</span>
+        <div class="box-title">Flutter 화면</div>
+        <div class="box-sub">6탭 스토리 표시<br>SNS 카드 갤러리 저장</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scenario-title" id="scen-title">하단 버튼으로 시나리오를 선택하세요</div>
+  <div class="step-text" id="step-text" style="color:#444c56">—</div>
+  <div class="dots-row" id="dots"></div>
+
+  <div class="controls">
+    <button class="ctrl" onclick="prev()">◀ 이전</button>
+    <button class="ctrl play" id="play-btn" onclick="togglePlay()">▶ 자동재생</button>
+    <button class="ctrl" onclick="next()">다음 ▶</button>
+    <div class="sep"></div>
+    <button class="scen sel" id="scen-text"
+      style="border-color:#58a6ff;color:#58a6ff"
+      onclick="setScenario('text')">📝 텍스트 검색</button>
+    <button class="scen" id="scen-image"
+      style="border-color:#bc8cff;color:#bc8cff"
+      onclick="setScenario('image')">📷 이미지 검색</button>
+    <button class="scen" id="scen-diary"
+      style="border-color:#34d399;color:#34d399"
+      onclick="setScenario('diary')">📖 일기 저장</button>
+  </div>
+
+</div>
+
+<script>
+const S = {
+  text: {
+    label: '📝 텍스트 검색',
+    color: '#58a6ff',
+    steps: [
+      { b:['b-flutter'],              a:[],          vc:false, c:'#58a6ff', t:'① Flutter App에서 음식 이름을 입력하고 검색 버튼을 탭합니다' },
+      { b:['b-flutter','b-django'],   a:['a1'],      vc:false, c:'#3fb950', t:'② Django REST API로 GET /story/{food}/ 요청을 전송합니다' },
+      { b:['b-django','b-naver'],     a:['a2'],      vc:false, c:'#e3b341', t:'③ Naver 검색 API로 유래·술·이야기·노래·미디어 탭을 병렬 수집합니다' },
+      { b:['b-django','b-wiki'],      a:['a3'],      vc:false, c:'#39d3f2', t:'④ Wikipedia API에서 음식 유래 원문 텍스트를 수집합니다' },
+      { b:['b-django','b-gemini'],    a:[],          vc:true,  c:'#bc8cff', t:'⑤ Django → Gemini 2.5 Flash: 탭별 맞춤 요약을 ThreadPoolExecutor로 병렬 생성합니다' },
+      { b:['b-gemini','b-recommend'], a:['a4'],      vc:false, c:'#f472b6', t:'⑥ 추천 서비스가 Gemini로 연관 음식 3개를 추출 후 Naver 이미지를 검색합니다' },
+      { b:['b-recommend','b-out'],    a:['a5','a6'], vc:false, c:'#34d399', t:'⑦ Django에서 6탭 JSON 응답을 조합하여 Flutter로 반환합니다' },
+      { b:['b-out'],                  a:[],          vc:false, c:'#60a5fa', t:'⑧ Flutter 화면에 유래·술·이야기·노래·미디어·추천 6탭 스토리를 표시합니다' },
+    ]
+  },
+  image: {
+    label: '📷 이미지 검색',
+    color: '#bc8cff',
+    steps: [
+      { b:['b-flutter'],              a:[],          vc:false, c:'#bc8cff', t:'① Flutter에서 카메라 또는 갤러리로 음식 사진을 선택합니다' },
+      { b:['b-flutter','b-django'],   a:['a1'],      vc:false, c:'#3fb950', t:'② Django POST /predict/ 엔드포인트로 이미지 파일을 업로드합니다' },
+      { b:['b-django','b-gemini'],    a:[],          vc:true,  c:'#bc8cff', t:'③ Google Gemini Vision이 이미지를 분석하여 음식명을 자동 인식합니다' },
+      { b:['b-django','b-flutter'],   a:['a1'],      vc:false, c:'#3fb950', t:'④ Django에서 { food_name: "비빔밥" } 반환 — Flutter가 자동 검색을 시작합니다' },
+      { b:['b-django','b-naver'],     a:['a2'],      vc:false, c:'#e3b341', t:'⑤ Naver API로 탭별 웹 문서 수집 및 Wikipedia 유래 텍스트 수집' },
+      { b:['b-gemini','b-recommend'], a:['a4'],      vc:false, c:'#f472b6', t:'⑥ Gemini 탭별 요약 생성 + 추천 서비스로 연관 음식 3개 + 이미지 수집' },
+      { b:['b-recommend','b-out'],    a:['a5','a6'], vc:false, c:'#60a5fa', t:'⑦ Django에서 6탭 JSON을 조합하여 Flutter로 최종 응답을 반환합니다' },
+      { b:['b-out'],                  a:[],          vc:false, c:'#58a6ff', t:'⑧ Flutter 화면에 스토리 표시 — SNS 카드 만들기로 갤러리 저장도 가능합니다' },
+    ]
+  },
+  diary: {
+    label: '📖 일기 저장',
+    color: '#34d399',
+    steps: [
+      { b:['b-flutter'],                          a:[],          vc:false, c:'#34d399', t:'① 스토리 화면 FAB에서 일기 저장 버튼을 탭합니다' },
+      { b:['b-flutter','b-django'],               a:['a1'],      vc:false, c:'#3fb950', t:'② 날짜 자동 입력 후 장소를 입력하고 Django POST /diary/ 요청 전송' },
+      { b:['b-django','b-sqlite'],                a:[],          vc:true,  c:'#34d399', t:'③ Django에서 SQLite DB에 일기 데이터(음식명·날짜·장소·탭 내용)를 저장합니다' },
+      { b:['b-sqlite'],                           a:[],          vc:false, c:'#3fb950', t:'④ SQLite 저장 완료 후 Django로 { id: 201 } 응답 반환' },
+      { b:['b-django','b-flutter'],               a:['a1'],      vc:false, c:'#34d399', t:'⑤ Flutter에서 저장 완료 다이얼로그 표시 후 화면을 이동합니다' },
+      { b:['b-flutter','b-sqlite','b-out'],        a:['a1','a6'], vc:true,  c:'#60a5fa', t:'⑥ GET /diary/ 조회로 저장된 전체 일기 목록을 Flutter 화면에 표시합니다' },
+    ]
+  }
+};
+
+const ALL_B = ['b-flutter','b-django','b-naver','b-wiki','b-gemini','b-recommend','b-sqlite','b-out'];
+const ALL_A = ['a1','a2','a3','a4','a5','a6'];
+
+let cur = 'text', step = 0, playing = false, timer = null;
+
+function setScenario(name) {
+  cur = name; step = 0;
+  stopPlay();
+  buildDots();
+  render();
+  document.querySelectorAll('.scen').forEach(b => b.classList.remove('sel'));
+  document.getElementById('scen-' + name).classList.add('sel');
+}
+
+function buildDots() {
+  const c = document.getElementById('dots');
+  c.innerHTML = '';
+  S[cur].steps.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => { step = i; render(); };
+    c.appendChild(d);
+  });
+}
+
+function render() {
+  const steps = S[cur].steps;
+  const s = steps[step];
+  const prevB = new Set(steps.slice(0, step).flatMap(x => x.b));
+
+  ALL_B.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('active','done');
+    if (s.b.includes(id)) el.classList.add('active');
+    else if (prevB.has(id)) el.classList.add('done');
+  });
+  ALL_A.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('active', s.a.includes(id));
+  });
+  document.getElementById('v-conn').classList.toggle('active', s.vc);
+
+  // scenario title
+  const st = document.getElementById('scen-title');
+  st.textContent = S[cur].label;
+  st.style.color = S[cur].color;
+
+  // step text with fade
+  const tx = document.getElementById('step-text');
+  tx.classList.add('fading');
+  setTimeout(() => {
+    tx.textContent = s.t;
+    tx.style.color = s.c;
+    tx.classList.remove('fading');
+  }, 180);
+
+  // dots
+  const dots = document.getElementById('dots').children;
+  for (let i = 0; i < dots.length; i++) {
+    dots[i].classList.remove('active','done');
+    if (i === step) dots[i].classList.add('active');
+    else if (i < step) dots[i].classList.add('done');
+  }
+}
+
+function next() {
+  step = (step + 1) % S[cur].steps.length;
+  render();
+}
+function prev() {
+  if (step > 0) { step--; render(); }
+}
+function togglePlay() { playing ? stopPlay() : startPlay(); }
+function startPlay() {
+  playing = true;
+  const b = document.getElementById('play-btn');
+  b.textContent = '⏸ 일시정지'; b.classList.add('paused');
+  timer = setInterval(next, 2800);
+}
+function stopPlay() {
+  playing = false;
+  const b = document.getElementById('play-btn');
+  b.textContent = '▶ 자동재생'; b.classList.remove('paused');
+  if (timer) { clearInterval(timer); timer = null; }
+}
+
+// 수직 연결선 위치: Django 박스 중앙 기준
+function positionVConn() {
+  const dj = document.getElementById('b-django');
+  const ct = document.querySelector('.container');
+  if (!dj || !ct) return;
+  const r = dj.getBoundingClientRect();
+  const cr = ct.getBoundingClientRect();
+  const cx = r.left + r.width / 2 - cr.left;
+  document.getElementById('v-conn').style.left = cx + 'px';
+}
+
+buildDots();
+render();
+window.addEventListener('load', positionVConn);
+window.addEventListener('resize', positionVConn);
+</script>
+</body>
+</html>
