@@ -41,7 +41,7 @@
 
 <sub>시스템 블록도 · ①부터 ⑩까지 단계별로 자동 재생됩니다 (한 바퀴 65초)</sub>
 
-<p align="center"><img src="assets/block_diagram.gif" alt="PetMind 동작 순서 블록도 애니메이션: 보호자 화면, 로컬 PC, 외부의 세 칸에서 ①외출 시작부터 ⑩음악 명령까지 단계별로 강조" width="100%"></p>
+<p align="center"><img src="PetMind_동작_순서.html" alt="PetMind 동작 순서 블록도 애니메이션: 보호자 화면, 로컬 PC, 외부의 세 칸에서 ①외출 시작부터 ⑩음악 명령까지 단계별로 강조" width="100%"></p>
 
 | 세 칸 구조 | 데이터 경계 | 평가 시작 | 음악 |
 |---|---|---|---|
