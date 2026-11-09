@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img,video{max-width:100%}[hidden]{display:none!important}</style>
+<title>PetMind 졸업작품 발표</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one scrolling column of presentation sections (one screen each), a sticky section bar, wide media blocks for the diagram and video */
+:root{
+  --bg:#f4f3fa; --surface:#ffffff; --ink:#16142a; --ink-2:#47445f; --line:#dbd8eb;
+  --accent:#5b4bd6; --accent-ink:#ffffff; --accent-soft:#ebe8fd; --ok:#15803d; --ok-soft:#e7f6ec; --warn:#b45309; --warn-soft:#fdf3e2;
+  --f-display:'IBM Plex Sans KR','Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif;
+  --f-body:'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121120; --surface:#1c1a2e; --ink:#f2f1fa; --ink-2:#bab7d1; --line:#302d48;
+  --accent:#a597ff; --accent-ink:#16142a; --accent-soft:#262148; --ok:#4ade80; --ok-soft:#14291d; --warn:#fbbf24; --warn-soft:#2d2412; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121120; --surface:#1c1a2e; --ink:#f2f1fa; --ink-2:#bab7d1; --line:#302d48;
+  --accent:#a597ff; --accent-ink:#16142a; --accent-soft:#262148; --ok:#4ade80; --ok-soft:#14291d; --warn:#fbbf24; --warn-soft:#2d2412; color-scheme:dark}
+
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font:500 17px/1.65 var(--f-body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.in{max-width:1180px;margin:0 auto}
+.in.wide{max-width:1440px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+img{display:block;max-width:100%;height:auto}
+.fill{display:inline-block;background:var(--warn-soft);color:var(--warn);border:1.5px dashed var(--warn);border-radius:8px;padding:0 8px;font-weight:700}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar .in{display:flex;align-items:center;gap:18px;height:52px}
+.brand{font:700 18px var(--f-display);color:var(--ink);text-decoration:none;white-space:nowrap}
+.nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.nav::-webkit-scrollbar{display:none}
+.nav a{white-space:nowrap;text-decoration:none;color:var(--ink-2);font-weight:700;font-size:14px;padding:6px 10px;border-radius:999px}
+.nav a.cur{background:var(--accent);color:var(--accent-ink)}
+.nav a .n{font-family:var(--f-mono);margin-right:4px;opacity:.7}
+
+section{padding-block:64px;scroll-margin-top:52px;border-bottom:1px solid var(--line)}
+.eyebrow{color:var(--accent);font:600 14px var(--f-mono);letter-spacing:.06em;margin-bottom:10px}
+h2{font-size:clamp(28px,3.4vw,40px);font-weight:700;line-height:1.25}
+.lead{margin-top:12px;color:var(--ink-2);font-size:18px;max-width:64ch}
+.stack{display:flex;flex-direction:column;gap:26px}
+.src{color:var(--ink-2);font-size:13.5px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px 24px}
+
+/* cover */
+.hero{padding-block:64px 64px;background:var(--surface)}
+.hero .dept{font:600 14px var(--f-mono);letter-spacing:.06em;color:var(--accent)}
+.hero h1{margin-top:10px;font-size:clamp(52px,7vw,88px);font-weight:700;line-height:1.05;letter-spacing:-.02em}
+.hero .sub{margin-top:10px;font-size:clamp(19px,2.2vw,24px);color:var(--ink-2);font-weight:600;max-width:40ch}
+.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:40px}
+.team div{border-top:2px solid var(--line);padding-top:10px;color:var(--ink-2);font-size:15px}
+.team b{display:block;color:var(--ink);font-size:18px;margin-top:2px}
+.toc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:36px;padding:0;list-style:none;counter-reset:t}
+.toc li{counter-increment:t}
+.toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);font-weight:700;padding:10px 12px;border-radius:12px;background:var(--bg)}
+.toc a::before{content:counter(t,decimal-leading-zero);font:600 13px var(--f-mono);color:var(--accent)}
+.toc a:hover{background:var(--accent-soft)}
+
+/* background */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.stat .v{font:600 clamp(34px,4vw,50px)/1.1 var(--f-mono);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:.5em;margin-left:4px}
+.stat .k{margin-top:8px;font:700 18px var(--f-display)}
+.stat .d{color:var(--ink-2);font-size:15px}
+.gap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;align-items:stretch}
+.gap .arrow{display:grid;place-items:center;font:700 28px var(--f-mono);color:var(--accent)}
+.gap h3{font-size:19px;margin-bottom:6px}
+.gap p{color:var(--ink-2)}
+.gap .need{background:var(--accent-soft);border-color:var(--accent)}
+
+/* goal */
+.goal{border:2px solid var(--accent);border-radius:20px;padding:26px 30px;background:var(--accent-soft)}
+.goal .k{font:600 14px var(--f-mono);letter-spacing:.06em;color:var(--accent)}
+.goal p{margin-top:6px;font:700 clamp(21px,2.5vw,29px)/1.45 var(--f-display);max-width:42ch}
+.principles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.principles div{background:var(--surface);border-radius:14px;padding:14px 18px;border:1px solid var(--line)}
+.principles b{display:block;font:700 20px var(--f-display)}
+.principles span{color:var(--ink-2);font-size:15.5px}
+
+/* stack */
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.col h3{font-size:19px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.col h3 span{font:600 12.5px var(--f-mono);color:var(--accent)}
+.col dl{margin:14px 0 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px}
+.col dt{color:var(--ink-2);font-size:14.5px;padding-top:2px}
+.col dd{margin:0;font-weight:700}
+.col.cloud{border-style:dashed;border-color:var(--accent)}
+
+/* diagram */
+.frame{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:10px;overflow:hidden}
+.frame iframe{display:block;width:100%;height:620px;border:0;background:transparent}
+.hint{color:var(--ink-2);font-size:14.5px}
+kbd{font:600 13px var(--f-mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 6px;background:var(--surface)}
+.group{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:16px;align-items:start}
+.group .dg{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
+.group .side{display:flex;flex-direction:column;gap:12px}
+.group .shot{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);align-self:center}
+.group .shot.phone{max-width:230px}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.steps li{display:flex;gap:10px;align-items:baseline;font-weight:700}
+.steps .s{flex:0 0 26px;height:26px;border-radius:50%;display:grid;place-items:center;font:600 13px var(--f-mono);background:var(--accent);color:var(--accent-ink);transform:translateY(5px)}
+.steps p{font-weight:500;color:var(--ink-2);font-size:15.5px}
+
+/* video */
+.video{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.player{border-radius:16px;overflow:hidden;background:#000;aspect-ratio:16/9;max-width:100%}
+.player video{display:block;width:100%;height:100%}
+.chap{list-style:none;margin:0;padding:8px;display:flex;flex-direction:column;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.chap button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:44px 28px minmax(0,1fr);align-items:center;gap:6px;padding:7px 10px;border-radius:10px;cursor:pointer;font-size:15px;font-weight:700;line-height:1.3}
+.chap button:hover{background:var(--bg)}
+.chap button:focus-visible{outline:3px solid var(--accent)}
+.chap .t{font:500 13px var(--f-mono);color:var(--ink-2)}
+.chap .s{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:600 12.5px var(--f-mono);background:var(--bg);border:1.5px solid var(--line)}
+.chap button.cur{background:var(--accent-soft)}
+.chap button.cur .s{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.note{color:var(--ink-2);font-size:14.5px;display:flex;gap:8px;align-items:flex-start}
+.note::before{content:"";flex:0 0 8px;height:8px;margin-top:8px;border-radius:50%;background:var(--warn)}
+
+/* results */
+.nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.num .v{font:600 clamp(34px,4vw,48px)/1.1 var(--f-mono);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.num .k{margin-top:10px;font:700 18px var(--f-display)}
+.num .d{color:var(--ink-2);font-size:14.5px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.box{border-radius:18px;padding:22px 26px}
+.box h3{font-size:20px;margin-bottom:10px}
+.box ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.box li{display:flex;gap:10px;font-weight:700}
+.box li::before{content:"";flex:0 0 9px;height:9px;margin-top:9px;border-radius:50%;background:currentColor}
+.box.ok{background:var(--ok-soft)}.box.ok h3,.box.ok li::before{color:var(--ok)}
+.box.no{background:var(--warn-soft)}.box.no h3,.box.no li::before{color:var(--warn)}
+.box li span{color:var(--ink)}
+
+/* problems */
+.pr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.15fr);border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface)}
+.pr>div{padding:14px 18px;border-top:1px solid var(--line)}
+.pr .h{border-top:0;font:600 13px var(--f-mono);letter-spacing:.05em;color:var(--ink-2);background:var(--bg)}
+.pr .h.fix{color:var(--accent)}
+.pr .p b{display:block;font:700 18px var(--f-display)}
+.pr .p span,.pr .c{color:var(--ink-2);font-size:15.5px}
+.pr .f{background:var(--accent-soft);font-weight:700}
+.pr .f span{display:block;font-weight:600;color:var(--ok);font-size:14.5px;margin-top:2px}
+
+/* plan */
+.plan{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.plan .tag{display:inline-block;font:600 12.5px var(--f-mono);letter-spacing:.04em;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 10px}
+.plan h3{font-size:21px;margin:10px 0 6px}
+.plan p{color:var(--ink-2);font-size:16px}
+
+/* team */
+.people{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.person h3{font-size:22px}
+.person .role{margin-top:6px}
+.person .say{margin-top:14px;color:var(--ink-2)}
+.person .say .fill{display:block;padding:10px 12px;font-weight:600;min-height:96px}
+
+.end{text-align:center;padding-block:90px}
+.end h2{font-size:clamp(40px,5vw,60px)}
+.end p{margin-top:10px;color:var(--ink-2)}
+
+footer{padding-block:28px 48px;color:var(--ink-2);font-size:14px}
+
+@media (max-width:900px){
+  .video,.group,.gap{grid-template-columns:1fr}
+  .gap .arrow{transform:rotate(90deg)}
+  .pr{grid-template-columns:1fr}
+  .pr .h{display:none}
+  .pr .p{border-top:2px solid var(--line);background:var(--bg)}
+  .pr .c::before{content:"원인 · ";font:600 13px var(--f-mono)}
+  .pr .f::before{content:"해결 · ";font:600 13px var(--f-mono);color:var(--accent)}
+  .nums,.plan,.two,.principles,.stats,.cols,.people{grid-template-columns:1fr}
+  .team,.toc{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){section{padding-block:48px}.brand{display:none}.goal{padding:18px}}
+</style>
+</head>
+<body>
+
+
+<header class="bar gut">
+  <div class="in">
+    <a class="brand" href="#top">PetMind</a>
+    <nav class="nav" aria-label="발표 단락">
+      <a href="#top"><span class="n">00</span>표지</a>
+      <a href="#why"><span class="n">01</span>배경</a>
+      <a href="#goal"><span class="n">02</span>목표</a>
+      <a href="#stack"><span class="n">03</span>구성</a>
+      <a href="#flow"><span class="n">04</span>동작 순서</a>
+      <a href="#demo"><span class="n">05</span>시연</a>
+      <a href="#result"><span class="n">06</span>검증</a>
+      <a href="#problem"><span class="n">07</span>문제와 해결</a>
+      <a href="#next"><span class="n">08</span>개선 방향</a>
+      <a href="#team"><span class="n">09</span>역할</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section id="top" class="hero gut">
+  <div class="in">
+    <div class="dept">임베디드소프트웨어학과 · 졸업작품 발표</div>
+    <h1>PetMind</h1>
+    <p class="sub">외출 중 반려견의 짖음을 알리고, 기록을 근거로 보호자의 돌봄을 돕는 시스템</p>
+    <div class="team">
+      <div>팀<b>ESC</b></div>
+      <div>팀원<b>2001175 김재준</b><b>2001205 유민형</b><b>2001218 임성배</b></div>
+      <div>지도교수<b>우주</b></div>
+      <div>발표일<b>2026. 11. 11.</b></div>
+    </div>
+    <ol class="toc" aria-label="목차">
+      <li><a href="#why">배경과 목표</a></li>
+      <li><a href="#stack">시스템 구성</a></li>
+      <li><a href="#flow">동작 순서</a></li>
+      <li><a href="#demo">시연 영상</a></li>
+      <li><a href="#result">검증 결과</a></li>
+      <li><a href="#problem">문제와 해결</a></li>
+      <li><a href="#next">한계와 개선 방향</a></li>
+      <li><a href="#team">역할과 느낀 점</a></li>
+    </ol>
+  </div>
+</section>
+
+<section id="why" class="gut">
+  <div class="in stack">
+    <div>
+      <div class="eyebrow">01 배경</div>
+      <h2>반려동물은 하루 6시간 가까이 혼자 집에 있습니다</h2>
+    </div>
+    <div class="stats">
+      <div class="card stat"><div class="v">591<small>만 가구</small></div><div class="k">반려가구</div><div class="d">전체 가구의 26.7% · 반려견 546만 마리 (2024년 말 추정)</div></div>
+      <div class="card stat"><div class="v">80.1<small>%</small></div><div class="k">반려동물을 혼자 두는 가구</div><div class="d">혼자 있는 시간은 하루 평균 5시간 54분</div></div>
+      <div class="card stat"><div class="v">34.8<small>%</small></div><div class="k">혼자 둘 때 CCTV 설치</div><div class="d">TV·조명 켜 두기 43.1%가 가장 많음</div></div>
+    </div>
+    <div class="gap">
+      <div class="card"><h3>지금의 방법</h3><p>CCTV는 보호자가 앱을 열어야 보이고, TV나 조명은 반려견 상태와 관계없이 켜 둡니다. 계속 짖어도 보호자는 알기 어렵습니다.</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="card need"><h3>필요한 것</h3><p>짖음이 이어질 때 알려 주고, 보호자가 원본을 확인하고, 필요할 때만 음악 같은 돌봄을 고를 수 있게 하는 것</p></div>
+    </div>
+    <p class="src">출처: KB경영연구소, 「2025 한국 반려동물 보고서」 (반려가구 수는 추정치, 혼자 두는 비율·시간·대처 방법은 반려가구 1,000명 설문)</p>
+  </div>
+</section>
+
+<section id="goal" class="gut">
+  <div class="in stack">
+    <div><div class="eyebrow">02 목표</div><h2>본 프로젝트의 목표</h2></div>
+    <div class="goal">
+      <div class="k">GOAL</div>
+      <p>외출 중 반려견이 계속 짖으면 보호자에게 알리고, 보호자가 원본을 확인한 뒤 과거 기록을 근거로 돌봄(음악 재생)을 직접 고르게 돕는다.</p>
+    </div>
+    <div class="principles">
+      <div><b>감지는 AI가</b><span>YAMNet이 5초마다 짖음 점수를 계산합니다</span></div>
+      <div><b>판단과 승인은 보호자가</b><span>원본을 듣고 의견을 남기고, 승인해야 재생합니다</span></div>
+      <div><b>원본은 집 PC에만</b><span>클라우드에는 기록에서 뽑은 문장만 보냅니다</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="stack" class="gut">
+  <div class="in stack">
+    <div><div class="eyebrow">03 시스템 구성</div><h2>집 PC 한 대가 감지·기록·재생을 맡습니다</h2>
+      <p class="lead">원본 소리와 영상은 PC 밖으로 나가지 않고, 클라우드는 설명 문장과 알림 중계에만 씁니다.</p></div>
+    <div class="cols">
+      <div class="card col"><h3>집 PC <span>LOCAL</span></h3><dl>
+        <dt>수집</dt><dd>노트북 마이크·웹캠, FFmpeg 5초 구간</dd>
+        <dt>감지</dt><dd>YAMNet (TensorFlow Hub)</dd>
+        <dt>서버·기록</dt><dd>FastAPI, SQLite</dd>
+        <dt>기록 검색</dt><dd>MCP 서버 (읽기 전용 도구 4개)</dd>
+        <dt>재생</dt><dd>PC 스피커</dd></dl></div>
+      <div class="card col"><h3>보호자 <span>PC · PHONE</span></h3><dl>
+        <dt>화면</dt><dd>Flutter 웹 (PC·폰 브라우저)</dd>
+        <dt>집 밖 접속</dt><dd>Tailscale VPN (공개 인터넷에 열지 않음)</dd>
+        <dt>알림</dt><dd>ntfy 앱</dd>
+        <dt>할 일</dt><dd>원본 확인 · 의견 · 평가 요청 · 승인</dd></dl></div>
+      <div class="card col cloud"><h3>클라우드 <span>CLOUD</span></h3><dl>
+        <dt>설명</dt><dd>Google Gemini API</dd>
+        <dt>알림 중계</dt><dd>ntfy 서버</dd>
+        <dt>받는 것</dt><dd>기록에서 뽑은 문장, 알림 문장</dd>
+        <dt>못 하는 것</dt><dd>PC의 DB·MCP 서버 접속</dd></dl></div>
+    </div>
+  </div>
+</section>
+
+<section id="flow" class="gut">
+  <div class="in wide stack">
+    <div><div class="eyebrow">04 동작 순서</div><h2>9단계로 보는 전체 흐름</h2>
+      <p class="lead">오른쪽 버튼이나 키보드로 단계를 넘기며 설명합니다. 아래에는 단계를 네 묶음으로 나눠 실제 화면과 함께 보여 줍니다.</p></div>
+    <div class="frame"><iframe id="flowFrame" src="flow.html#embed" title="PetMind 동작 순서 블록도 (단계별 애니메이션)" loading="lazy"></iframe></div>
+    <p class="hint">블록도를 한 번 클릭한 뒤 <kbd>←</kbd> <kbd>→</kbd>로 단계 이동, <kbd>Space</kbd>로 재생과 정지를 합니다.</p>
+
+    <div class="group" id="g1">
+      <div class="dg"><img src="img/diagram_g1.png" alt="블록도에서 보호자 폰, 백엔드, 수집 프로그램, YAMNet, 기록 DB가 강조되고 왼쪽에 외출 시작 폰 화면이 겹쳐 있음" loading="lazy"></div>
+      <div class="side">
+        <ol class="steps">
+          <li><span class="s">1</span><div>폰에서 외출 시작<p>Tailscale VPN을 거쳐 PC 서버에 수집 요청이 만들어집니다</p></div></li>
+          <li><span class="s">2</span><div>소리·영상 수집<p>마이크·웹캠을 FFmpeg가 5초씩 자릅니다</p></div></li>
+          <li><span class="s">3</span><div>YAMNet 짖음 감지<p>개 짖음 점수가 0.05를 넘으면 후보</p></div></li>
+          <li><span class="s">4</span><div>기록·사건 영상 저장<p>후보 구간은 앞뒤 5초를 붙인 영상으로</p></div></li>
+        </ol>
+        <div class="shot"><img src="img/shot_g1.png" alt="저장된 사건 영상을 보호자 화면에서 재생하는 모습" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="group" id="g2">
+      <div class="dg"><img src="img/diagram_g2.png" alt="블록도에서 기록 DB, 백엔드, ntfy 알림 서비스, 보호자 폰이 강조됨" loading="lazy"></div>
+      <div class="side">
+        <ol class="steps">
+          <li><span class="s">5</span><div>30초 지속 → 폰 알림<p>최근 6구간 중 5구간이 후보면 ntfy로 알립니다</p></div></li>
+          <li><span class="s">6</span><div>폰에서 확인<p>Tailscale VPN으로 접속해 원본을 듣고 의견을 남깁니다</p></div></li>
+        </ol>
+        <div class="shot phone"><img src="img/shot_g2.png" alt="폰 화면 상단에 지속 짖음 경고가 뜬 모습" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="group" id="g3">
+      <div class="dg"><img src="img/diagram_g3.png" alt="블록도에서 보호자 화면, 백엔드, 기록 DB, MCP 서버, 클라우드 LLM이 강조됨" loading="lazy"></div>
+      <div class="side">
+        <ol class="steps">
+          <li><span class="s">7</span><div>기록 기반 상태 평가<p>MCP 서버가 같은 반려견의 기록만 찾아 Gemini에 보냅니다</p></div></li>
+          <li><span class="s">8</span><div>응답 검사<p>인용한 기록이 실제로 찾은 것인지 확인, 아니면 규칙으로 대체</p></div></li>
+        </ol>
+        <div class="shot"><img src="img/shot_g3.png" alt="근거 기반 케어 제안이 표시된 PC 화면" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="group" id="g4">
+      <div class="dg"><img src="img/diagram_g4.png" alt="블록도에서 보호자 화면, 음악 명령 관리, PC 스피커가 강조됨" loading="lazy"></div>
+      <div class="side">
+        <ol class="steps">
+          <li><span class="s">9</span><div>승인 → PC 스피커 재생<p>보호자가 승인해야 명령이 가고, 최대 60초 재생 후 결과를 기록합니다</p></div></li>
+        </ol>
+        <div class="shot phone"><img src="img/shot_g4.png" alt="폰 화면의 PC 스피커로 음악 재생 승인 버튼" loading="lazy"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="demo" class="gut">
+  <div class="in wide stack">
+    <div><div class="eyebrow">05 시연 영상</div><h2>외출부터 음악 재생까지 3분 31초</h2>
+      <p class="lead">오른쪽 단계를 누르면 그 장면으로 갑니다.</p></div>
+    <div class="video">
+      <div class="player"><video id="demoVideo" src="demo.mp4" poster="poster.jpg" controls preload="metadata" playsinline></video></div>
+      <ol class="chap" id="chap" aria-label="영상 단계"></ol>
+    </div>
+    <p class="note">개를 직접 촬영하기 어려워, 카메라 밖에서 폰 스피커로 개 짖는 소리를 틀어 시험했습니다.</p>
+  </div>
+</section>
+
+<section id="result" class="gut">
+  <div class="in stack">
+    <div><div class="eyebrow">06 검증 결과</div><h2>짖음 감지와 전체 연결을 확인했습니다</h2>
+      <p class="lead">판정 기준은 0.05로 고정하고 공개 음원과 실제 마이크로 시험했습니다.</p></div>
+    <div class="nums">
+      <div class="card num"><div class="v">40/40</div><div class="k">개 소리 감지</div><div class="d">ESC-50 2,000클립 전체 평가</div></div>
+      <div class="card num"><div class="v">1.4%</div><div class="k">생활 소음 오탐</div><div class="d">FSD50K 680클립 · 초인종·노크·전화 0건</div></div>
+      <div class="card num"><div class="v">2/2 · 3/4</div><div class="k">실제 마이크 감지</div><div class="d">스피커로 튼 짖음을 노트북 마이크로</div></div>
+    </div>
+    <div class="two">
+      <div class="box ok"><h3>확인한 것</h3><ul>
+        <li><span>소리 감지 → 알림 → 승인 → PC 스피커 재생</span></li>
+        <li><span>폰·다른 PC에서 접속 (집 밖은 Tailscale VPN)</span></li>
+        <li><span>기록 근거 설명과 클라우드로 보내는 범위</span></li>
+      </ul></div>
+      <div class="box no"><h3>아직 확인하지 못한 것</h3><ul>
+        <li><span>실제 강아지 소리의 감지와 알림</span></li>
+        <li><span>음악이 강아지를 안정시키는 효과</span></li>
+        <li><span>1초 미만 짖음, 울음·고양이 같은 비슷한 소리</span></li>
+      </ul></div>
+    </div>
+    <p class="src">공개 음원과 재생음으로 한 시험이며 실제 가정 환경의 정확도는 아닙니다. 수치 출처: 저장소 docs/STATUS.md</p>
+  </div>
+</section>
+
+<section id="problem" class="gut">
+  <div class="in stack">
+    <div><div class="eyebrow">07 문제와 해결</div><h2>만들면서 부딪힌 문제 네 가지</h2></div>
+    <div class="pr" role="table" aria-label="문제, 원인, 해결">
+      <div class="h" role="columnheader">문제</div><div class="h" role="columnheader">원인</div><div class="h fix" role="columnheader">해결과 결과</div>
+      <div class="p" role="cell"><b>짖음을 잘 못 찾음</b><span>직접 학습한 LSTM, 외부 데이터 F1 42.9%</span></div>
+      <div class="c" role="cell">학습에 쓰지 않은 외부 소리에서 성능이 크게 떨어짐</div>
+      <div class="f" role="cell">사전 학습된 YAMNet으로 교체, 기준 0.05<span>ESC-50 40/40 · 생활 소음 오탐 1.4%</span></div>
+      <div class="p" role="cell"><b>장치 구성이 복잡함</b><span>라즈베리파이 수집 + PC 분석</span></div>
+      <div class="c" role="cell">수집 장치와 분석 PC를 따로 켜고 연결해야 함</div>
+      <div class="f" role="cell">PC 하나로 통합, 수집이 멈추면 자동 재시작<span>10분 수집 중 강제 종료 2회 모두 자동 복구</span></div>
+      <div class="p" role="cell"><b>집 밖에서 카메라가 끊김</b><span>모바일 데이터로 실시간 화면 확인 시</span></div>
+      <div class="c" role="cell">망 속도와 관계없이 같은 화질로 요청</div>
+      <div class="f" role="cell">망 속도에 맞춰 화질과 요청 수 자동 조절<span>데이터 사용량 약 1/8</span></div>
+      <div class="p" role="cell"><b>AI 설명을 믿을 근거 부족</b><span>무엇을 보고 답했는지 보이지 않음</span></div>
+      <div class="c" role="cell">찾은 기록만 표시하고 보낸 내용 전체는 숨겨져 있었음</div>
+      <div class="f" role="cell">AI에 보낸 내용 전문 공개, 응답 인용 검사<span>검사를 통과 못 하면 규칙 기반 제안으로 대체</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="next" class="gut">
+  <div class="in stack">
+    <div><div class="eyebrow">08 한계와 개선 방향</div><h2>실제 강아지로 검증하는 것이 다음 과제입니다</h2></div>
+    <div class="plan">
+      <div class="card"><span class="tag">검증</span><h3>실제 강아지로 처음부터 끝까지</h3><p>감지, 30초 알림, 승인, 음악 재생을 실제 짖음으로 시험하고 재생 전후 짖음 변화를 기록합니다.</p></div>
+      <div class="card"><span class="tag">감지</span><h3>짧은 짖음과 비슷한 소리</h3><p>1초 미만 짖음을 놓치는 문제와 울음·고양이 소리 오탐을 줄입니다.</p></div>
+      <div class="card"><span class="tag">설명</span><h3>과거 외출과 비교하는 근거</h3><p>과거 기록에 짖음 점수와 보호자 의견을 담아, 직전 구간이 아닌 지난 외출과 비교하게 합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="team" class="gut">
+  <div class="in stack">
+    <div><div class="eyebrow">09 역할과 느낀 점</div><h2>역할과 느낀 점</h2></div>
+    <div class="people">
+      <div class="card person"><h3>김재준</h3><div class="role"><span class="fill">맡은 역할</span></div><div class="say"><span class="fill">느낀 점 2~3줄</span></div></div>
+      <div class="card person"><h3>유민형</h3><div class="role"><span class="fill">맡은 역할</span></div><div class="say"><span class="fill">느낀 점 2~3줄</span></div></div>
+      <div class="card person"><h3>임성배</h3><div class="role"><span class="fill">맡은 역할</span></div><div class="say"><span class="fill">느낀 점 2~3줄</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="end gut">
+  <div class="in"><h2>감사합니다</h2><p>질문 받겠습니다</p></div>
+</section>
+</main>
+
+<footer class="gut"><div class="in">설명 생성: Google Gemini API · 음악: Kevin MacLeod, CC BY 4.0 · 배경 통계: KB경영연구소 「2025 한국 반려동물 보고서」 · 감지 수치: 저장소 docs/STATUS.md</div></footer>
+
+<script>
+(()=>{
+  const CH=[[0,'','표지'],[5,'1','외출 시작'],[20,'2','소리·영상 수집'],[25,'3','YAMNet 짖음 감지'],[37,'4','사건 영상·기록 저장'],
+    [63,'5','30초 지속 → 폰 알림'],[86,'6','폰에서 확인'],[106,'7','기록 기반 상태 평가'],[127,'8','응답 검사'],
+    [137,'7','AI에 보낸 내용 · 폰 질문'],[166,'8','지난 외출과 비교한 답'],[174,'9','승인 → PC 스피커 재생'],[190,'✓','검증 범위']];
+  const v=document.getElementById('demoVideo'), ol=document.getElementById('chap');
+  const fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+  const btns=CH.map(([t,s,name])=>{
+    const li=document.createElement('li'),b=document.createElement('button');b.type='button';
+    b.innerHTML='<span class="t"></span><span class="s"></span><span class="x"></span>';
+    b.children[0].textContent=fmt(t);b.children[1].textContent=s||'·';b.children[2].textContent=name;
+    b.setAttribute('aria-label',fmt(t)+' '+(s?'단계 '+s+' ':'')+name);
+    b.addEventListener('click',()=>{v.currentTime=t;v.play().catch(()=>{});});
+    li.appendChild(b);ol.appendChild(li);return b;});
+  let cur=-1;const mark=()=>{let i=0;CH.forEach(([t],k)=>{if(v.currentTime>=t-0.05)i=k});
+    if(i!==cur){cur=i;btns.forEach((b,k)=>{b.classList.toggle('cur',k===i);b.setAttribute('aria-current',k===i?'true':'false')})}};
+  v.addEventListener('timeupdate',mark);v.addEventListener('seeked',mark);mark();
+
+  const fr=document.getElementById('flowFrame');
+  addEventListener('message',e=>{const h=e.data&&e.data.petmindFlowHeight;if(e.source===fr.contentWindow&&h>200)fr.style.height=Math.ceil(h)+'px';});
+
+  const links=[...document.querySelectorAll('.nav a')];
+  const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const k=secs.indexOf(e.target);
+    links.forEach((a,j)=>a.classList.toggle('cur',j===k));
+    links[k].scrollIntoView({block:'nearest',inline:'nearest'});}})},{rootMargin:'-45% 0px -50% 0px'});
+  secs.forEach(s=>io.observe(s));
+
+  // PageDown / PageUp move between sections and diagram groups while presenting
+  const stops=[...document.querySelectorAll('main > section, .group')];
+  addEventListener('keydown',e=>{
+    if(e.target.closest&&e.target.closest('video,input,textarea,select'))return;
+    if(e.key!=='PageDown'&&e.key!=='PageUp')return;
+    const top=el=>el.getBoundingClientRect().top+scrollY;
+    const y=scrollY+60;let target;
+    if(e.key==='PageDown')target=stops.find(s=>top(s)>y+5);
+    else target=[...stops].reverse().find(s=>top(s)<y-5);
+    if(target){e.preventDefault();target.scrollIntoView();}
+  });
+})();
+</script>
+
+</body>
+</html>
