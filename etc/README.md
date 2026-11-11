@@ -30,5 +30,3 @@ $ find . -name *.txt
 | cp | /usr/bin/cp, /bin/cp | 파일 복사 |
 | rm | /usr/bin/rm, /bin/rm | 파일 삭제 |
 | ifconfig | /usr/sbin/ifconfig, /sbin/ifconfig | 네트워크 인터페이스 설정 및 확인, 관리자용 명령어라 sbin에 있음, net-tools 패키지에 포함되어 있어 설치되어 있지 않으면 `sudo apt install net-tools`로 설치 |
-
-<img src="img6-1-6.png">
