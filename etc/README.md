@@ -13,17 +13,11 @@ $ find . -name *.txt
 | `find . -name *.txt` | 셸이 find를 실행하기 전에 `*.txt`를 작업 디렉터리의 파일 이름으로 먼저 경로 확장한 뒤 그 결과를 find에 전달함, 따라서 작업 디렉터리에 있는 .txt 파일의 개수에 따라 결과가 달라짐 |
 
 # --help 옵션을 사용하여 명령어의 사용법을 출력하는 예제를 만들어보라
-```bash
-$ ls --help
-$ cat --help
 
 <img src="img6-1-2.png">
 <img src="img6-1-3.png">
 
 # man 명령어로 명령어의 사용법을 출력하는 예제를 만들어보라
-```bash
-$ man cat
-$ man ls
 
 <img src="img6-1-4.png">
 <img src="img6-1-5.png">
