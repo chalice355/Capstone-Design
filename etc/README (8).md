@@ -28,7 +28,7 @@ $ ls -l /bin/cat
 
 # 실습과제 2
 ## 수치모드를 이용하여 newfile1의 퍼미션을 아래처럼 수정하라.
-<img src="img9-1-3.png">
+<img src="img9-1-2.png">
 
 | 명령어 | 설명 |
 | --- | --- |
